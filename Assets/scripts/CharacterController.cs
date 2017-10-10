@@ -6,10 +6,14 @@ public class CharacterController : MonoBehaviour {
 	public float speed = 10.0f;
 	private float shootTimer = 0, fireRate = .2f;
 
-	public int score = 0, lives = 3;
+	public int lives = 3;
+	private bool dead = false;
 	public AudioClip gunShot;
-	public AudioClip DamageTaken;
+	public AudioClip damageTaken;
+	public AudioClip gameOver;
 	private AudioSource source;
+
+	public GameController controller;
 
 	void Awake()
 	{
@@ -33,7 +37,8 @@ public class CharacterController : MonoBehaviour {
 
 		transform.Translate(0, 0, translation);
 		//*/
-
+		if(dead)
+			return;
 		if(Input.GetKeyDown("escape"))
 			Cursor.lockState = CursorLockMode.None;
 		
@@ -52,12 +57,9 @@ public class CharacterController : MonoBehaviour {
 		}
 
 		if(lives <= 0){
-			Die();
+			dead=true;
+			controller.GameOver();
 		}
-	}
-
-	void Die(){
-		//Ohnoes he dieded, implement stuff
 	}
 	void Shoot(){
 		source.PlayOneShot(gunShot, .5f);
@@ -66,18 +68,18 @@ public class CharacterController : MonoBehaviour {
 		RaycastHit hit;
 		if(Physics.Raycast(ray, out hit, 100))
 			if(hit.collider.tag == "Alien"){
-				Shot(hit.collider.gameObject);				
+				Shot(hit.collider.gameObject);
 			}
 	}
 
 
 	public void Hit(){
 		lives--;
-		source.PlayOneShot(DamageTaken);
+		source.PlayOneShot(damageTaken);
 	}
 
 	void Shot(GameObject alien){
 		alien.GetComponent<AlienBehavior>().Die();
-		score++;
+		controller.score++;
 	}
 }

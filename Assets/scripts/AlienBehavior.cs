@@ -4,13 +4,16 @@ using System.Collections;
 public class AlienBehavior : MonoBehaviour {
 
 	public GameObject player;
+	public GameController controller;
 
-	public float speed = .01f;
 	public AudioClip dyingAlien, detectedAlien;
 	private AudioSource source;
 	private bool playAudio = true, detected = false;
 	public bool alive = true;
 	private float timer;
+	public float speed;
+	public int index;
+
 	
 
 	void Awake()
@@ -27,6 +30,8 @@ public class AlienBehavior : MonoBehaviour {
 		var renderer = GetComponent<MeshRenderer>();
 		renderer.enabled = false;
 		Destroy(gameObject, dyingAlien.length);
+		controller.SpawnAlien(index);
+		controller.score++;
 	}
 
 	public void Detected(){
@@ -45,6 +50,7 @@ public class AlienBehavior : MonoBehaviour {
 		if(Vector3.Distance(transform.position, player.transform.position) < 2f){
 			player.GetComponent<CharacterController>().Hit();
 			Destroy(gameObject);
+			controller.SpawnAlien(index);
 		}
 		transform.Translate(0, 0, speed);
 
