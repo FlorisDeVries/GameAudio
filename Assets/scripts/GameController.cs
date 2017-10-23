@@ -6,6 +6,7 @@ public class GameController : MonoBehaviour {
 	public GameObject player;
 	public GameObject alienPrefab;
 
+
 	private CharacterController playerController;
 	public int maxAliens = 3;
 	public int alienCount = 0;
@@ -57,12 +58,6 @@ public class GameController : MonoBehaviour {
 		playerController.Hit();
 	}
 
-	public void GameOver(){
-		for(int i = 0; i < maxAliens; i++)
-			Destroy(aliens[i]);
-		source.PlayOneShot(gameOver);
-		running = false;
-	}
 
 	Vector3 RandomCircle(Vector3 center, float distance){
 		float ang = Random.Range(0, 360);
@@ -76,5 +71,21 @@ public class GameController : MonoBehaviour {
 	public void AlienDying(int index, float length){
 		Destroy(aliens[index], length);
 		SpawnAlien(index);
+	}
+	public void GameOver(){
+		for(int i = 0; i < maxAliens; i++)
+			Destroy(aliens[i]);
+		source.PlayOneShot(gameOver);
+		running = false;
+
+		StartCoroutine("GameOverLoad");
+		
+	}
+
+	IEnumerator GameOverLoad(){
+		yield return new WaitForSeconds(gameOver.length);
+
+		Application.LoadLevel("GameOver");
+
 	}
 }
