@@ -69,7 +69,6 @@ public class CharacterController : MonoBehaviour {
 	}
 
 	void Shot(GameObject alien){
-		alien.GetComponent<AlienBehavior>().Die();
-		controller.score++;
+		alien.GetComponent<AlienBehavior>().Die(true);
 	}
 }

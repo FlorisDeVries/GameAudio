@@ -6,10 +6,10 @@ public class AlienBehavior : MonoBehaviour {
 	public GameObject player;
 	public GameController controller;
 
-	public AudioClip dyingAlien, detectedAlien;
+	public AudioClip dyingAlien, detectedAlien, TPin;
 	private AudioSource source;
 	private bool playAudio = true, detected = false;
-	public bool alive = true;
+	public bool alive = true, spawned = false;
 	private float timer;
 	public float speed;
 	public int index;
@@ -22,10 +22,11 @@ public class AlienBehavior : MonoBehaviour {
 	}
 	void Start () {
 		transform.LookAt(player.transform);
+		source.PlayOneShot(TPin);		
 	}
 
-	public void Die(){
-		if(!alive)
+	public void Die(bool scored){
+		if(!alive || !spawned)
 			return;
 
 		alive = false;
@@ -34,11 +35,13 @@ public class AlienBehavior : MonoBehaviour {
 		renderer.enabled = false;
 
 		controller.AlienDying(index, dyingAlien.length);
+		if(scored)
+			controller.score++;
 	}
 
 	public void Detected(){
 		detected = true;
-		if(playAudio){
+		if(playAudio && spawned){
 			source.PlayOneShot(detectedAlien, 1f);
 			timer = 0;
 			playAudio = false;
@@ -46,6 +49,16 @@ public class AlienBehavior : MonoBehaviour {
 	}
 
 	void Update () {
+		if(!spawned)
+			if(timer < TPin.length){
+				timer += Time.deltaTime;
+				return;
+			} else {
+				spawned = true;
+				timer = 0;
+			}
+
+
 		if(!alive)
 			return;
 

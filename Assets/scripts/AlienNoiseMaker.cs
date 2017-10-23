@@ -16,10 +16,14 @@ public class AlienNoiseMaker : MonoBehaviour {
 
 	void Start () {
 		timer = noise.length;
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if(!transform.parent.gameObject.GetComponent<AlienBehavior>().spawned)
+			return;
+
 		if(!transform.parent.gameObject.GetComponent<AlienBehavior>().alive){
 			source.Stop();
 			return;
