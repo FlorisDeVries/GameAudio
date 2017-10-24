@@ -3,7 +3,10 @@ using System.Collections;
 
 public class AlienNoiseMaker : MonoBehaviour {
 
-	public AudioClip noise;
+	public AudioClip noise1, noise2, noise3;
+
+	private AudioClip clip;
+
 
 	private AudioSource source;
 
@@ -15,8 +18,8 @@ public class AlienNoiseMaker : MonoBehaviour {
 	}
 
 	void Start () {
-		timer = noise.length;
-
+		RandomClip();
+		timer = clip.length;
 	}
 	
 	// Update is called once per frame
@@ -30,9 +33,15 @@ public class AlienNoiseMaker : MonoBehaviour {
 		}
 		
 		timer += Time.deltaTime;
-		if(timer > noise.length){
-			source.PlayOneShot(noise, 3f);
+		if(timer > clip.length){
+			source.PlayOneShot(clip, 3f);
+			RandomClip();
 			timer = 0;
 		}
+	}
+
+	void RandomClip(){
+		AudioClip[] clips = new AudioClip[3] {noise1, noise2, noise3};
+		clip = clips[Random.Range(0,3)];
 	}
 }
