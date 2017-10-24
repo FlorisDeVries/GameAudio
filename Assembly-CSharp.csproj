@@ -56,12 +56,9 @@
      <Compile Include="Assets\scripts\CamMouseLook.cs" />
      <Compile Include="Assets\scripts\CharacterController.cs" />
      <Compile Include="Assets\scripts\GameController.cs" />
-<<<<<<< HEAD
      <Compile Include="Assets\scripts\GameOver\GameOverController.cs" />
-=======
      <Compile Include="Assets\scripts\RightClickLoadGame.cs" />
      <Compile Include="Assets\scripts\Spinning.cs" />
->>>>>>> 55e28eed0186733c32d9425ee0672975a4f164dc
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
