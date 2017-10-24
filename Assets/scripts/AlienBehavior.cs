@@ -8,10 +8,9 @@ public class AlienBehavior : MonoBehaviour {
 
 	public AudioClip dyingAlien, detectedAlien, TPin;
 	private AudioSource source;
-	private bool playAudio = true, detected = false;
 	public bool alive = true, spawned = false;
-	private float timer;
 	public float speed;
+	private float timer= 0;
 	public int index;
 
 	
@@ -39,14 +38,6 @@ public class AlienBehavior : MonoBehaviour {
 			controller.score++;
 	}
 
-	public void Detected(){
-		detected = true;
-		if(playAudio && spawned){
-			source.PlayOneShot(detectedAlien, 1f);
-			timer = 0;
-			playAudio = false;
-		}
-	}
 
 	void Update () {
 		if(!spawned)
@@ -68,12 +59,5 @@ public class AlienBehavior : MonoBehaviour {
 			controller.SpawnAlien(index);
 		}
 		transform.Translate(0, 0, speed);
-
-		if (!detected)
-			source.Stop();
-		timer += Time.deltaTime;
-		if(timer > detectedAlien.length)
-			playAudio = true;
-		detected = false;
 	}
 }

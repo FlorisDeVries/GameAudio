@@ -20,21 +20,28 @@ public class GameController : MonoBehaviour {
 	private bool running = true ;
 
 	public int score = 0;
-	// Use this for initialization
+	public float timer, alienspawnDelay;
 	void Start () {
 		playerController = player.GetComponent<CharacterController>();
 		source = GetComponent<AudioSource>();
 		aliens = new GameObject[maxAliens];
 		alienBehavior = new AlienBehavior[maxAliens];
+		timer = 0;
+		alienspawnDelay = 8;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if(!running)
 			return;
+		timer+= Time.deltaTime;
 		if(alienCount < maxAliens){
-			SpawnAlien(alienCount);
-			alienCount++;
+			if(timer > alienspawnDelay){
+				SpawnAlien(alienCount);
+				alienCount++;
+				timer = 0;
+			}
+			timer += Time.deltaTime;
 		}
 	}
 

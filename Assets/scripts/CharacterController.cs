@@ -11,9 +11,13 @@ public class CharacterController : MonoBehaviour {
 	public AudioClip gunShot;
 	public AudioClip damageTaken;
 	public AudioClip gameOver;
+	public AudioClip detectedAlien;
 	private AudioSource source;
 
 	public GameController controller;
+
+	private float timer = 0;
+	private bool playAudio = true;
 
 	void Awake()
 	{
@@ -37,20 +41,35 @@ public class CharacterController : MonoBehaviour {
 			Shoot();
 
 
-		Debug.DrawRay(transform.position, transform.forward);
-		Ray ray = new Ray(transform.position, transform.forward);
-		RaycastHit hit;
-		if(Physics.Raycast(ray, out hit, 1000)){
-			if(hit.collider.tag == "Alien"){
-				hit.collider.GetComponent<AlienBehavior>().Detected();
-			}
-		}
+		timer += Time.deltaTime;
+		if(timer > detectedAlien.length)
+			playAudio = true;
+
+		CheckLockOn();
 
 		if(lives <= 0){
 			dead=true;
 			controller.GameOver();
 		}
 	}
+
+	void CheckLockOn(){
+		Debug.DrawRay(transform.position, transform.forward);
+		Ray ray = new Ray(transform.position, transform.forward);
+		RaycastHit hit;
+		if(Physics.Raycast(ray, out hit, 1000)){
+			if(hit.collider.tag == "Alien"){
+				bool spawned = hit.collider.GetComponent<AlienBehavior>().spawned;
+				bool alive = hit.collider.GetComponent<AlienBehavior>().alive;
+				if(spawned && playAudio && alive){
+					source.PlayOneShot(detectedAlien);
+					timer = 0;
+					playAudio = false;
+				}
+			}
+		}
+	}
+	
 	void Shoot(){
 		source.PlayOneShot(gunShot, .5f);
 		shootTimer = 0;
