@@ -6,7 +6,9 @@ public class AlienBehavior : MonoBehaviour {
 	public GameObject player;
 	public GameController controller;
 
-	public AudioClip dyingAlien, detectedAlien, TPin;
+	public AudioClip detectedAlien, TPin;
+
+	public AudioClip dyingAlien1, dyingAlien2, dyingAlien3, dyingAlien4, dyingAlien5;
 	private AudioSource source;
 	public bool alive = true, spawned = false;
 	public float speed;
@@ -21,7 +23,10 @@ public class AlienBehavior : MonoBehaviour {
 	}
 	void Start () {
 		transform.LookAt(player.transform);
-		source.PlayOneShot(TPin);		
+		source.PlayOneShot(TPin);
+
+		AudioClip[] clips = new AudioClip[5] {dyingAlien1, dyingAlien2, dyingAlien3, dyingAlien4, dyingAlien5};
+		dyingAlien1 = clips[Random.Range(0,5)];
 	}
 
 	public void Die(bool scored){
@@ -29,11 +34,11 @@ public class AlienBehavior : MonoBehaviour {
 			return;
 
 		alive = false;
-		source.PlayOneShot(dyingAlien, 3f);
+		source.PlayOneShot(dyingAlien1, 3f);
 		var renderer = GetComponent<MeshRenderer>();
 		renderer.enabled = false;
 
-		controller.AlienDying(index, dyingAlien.length);
+		controller.AlienDying(index, dyingAlien1.length);
 		if(scored)
 			controller.score++;
 	}
