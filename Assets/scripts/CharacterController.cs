@@ -71,7 +71,7 @@ public class CharacterController : MonoBehaviour {
 	}
 	
 	void Shoot(){
-		source.PlayOneShot(gunShot, .5f);
+		source.PlayOneShot(gunShot, .9f);
 		shootTimer = 0;
 		Ray ray = new Ray(transform.position, transform.forward);
 		RaycastHit hit;
